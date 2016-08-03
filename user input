@@ -1,0 +1,74 @@
+### How to accept the User input in ansible 
+### Below example will print the entered input. If nothing is entered by default it will take nova.
+---
+- name: Enabling overcloud debug logs
+  hosts: all
+  user: heat-admin
+  become: yes
+  become_method: sudo
+  become_user: root
+  gather_facts: false
+  vars_prompt: 
+  - name: "service_name"
+    prompt: "Service name for debug logs"
+    default: "nova"
+    private: no
+  tasks:
+  - debug:
+      msg: "{{service_name}}"
+    
+### Output 
+
+## Printing the entered input.
+
+ansible-playbook enable_debug.yml 
+Service name for debug logs [nova]: neutron
+
+PLAY [Enabling overcloud debug logs] *******************************************
+
+TASK [debug] *******************************************************************
+ok: [192.0.2.7] => {
+    "msg": "neutron"
+}
+ok: [192.0.2.9] => {
+    "msg": "neutron"
+}
+ok: [192.0.2.6] => {
+    "msg": "neutron"
+}
+ok: [192.0.2.8] => {
+    "msg": "neutron"
+}
+
+PLAY RECAP *********************************************************************
+192.0.2.6                  : ok=1    changed=0    unreachable=0    failed=0   
+192.0.2.7                  : ok=1    changed=0    unreachable=0    failed=0   
+192.0.2.8                  : ok=1    changed=0    unreachable=0    failed=0   
+192.0.2.9                  : ok=1    changed=0    unreachable=0    failed=0   
+
+## Printing the default input i.e nova
+
+ansible-playbook enable_debug.yml 
+Service name for debug logs [nova]: 
+
+PLAY [Enabling overcloud debug logs] *******************************************
+
+TASK [debug] *******************************************************************
+ok: [192.0.2.7] => {
+    "msg": "nova"
+}
+ok: [192.0.2.8] => {
+    "msg": "nova"
+}
+ok: [192.0.2.6] => {
+    "msg": "nova"
+}
+ok: [192.0.2.9] => {
+    "msg": "nova"
+}
+
+PLAY RECAP *********************************************************************
+192.0.2.6                  : ok=1    changed=0    unreachable=0    failed=0   
+192.0.2.7                  : ok=1    changed=0    unreachable=0    failed=0   
+192.0.2.8                  : ok=1    changed=0    unreachable=0    failed=0   
+192.0.2.9                  : ok=1    changed=0    unreachable=0    failed=0 
