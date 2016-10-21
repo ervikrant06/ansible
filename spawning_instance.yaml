@@ -9,11 +9,11 @@
       login_password: 2aef07b2f2bb465d
       login_tenant_name: admin
       auth_url: http://127.0.0.1:5000/v2.0/
-      name: cirros-instance1
-      image_name: cirros
+      name: rhel-instance1
+      image_name: rhel7.2
       key_name: keypair1
       wait_for: 200
-      flavor_id: 1
+      flavor_id: cf88ca1e-3ff4-4503-a77b-ceb07e978ffb
       #auto_floating_ip: yes
       floating_ips: 
         - 192.168.122.3
@@ -21,3 +21,15 @@
         - net-id: 31743f8e-8204-4da3-9bc4-6b44f417eeb6
       meta:
         hostname: cirros-instance1.localdomain
+    register: nova 
+  - name: Adding created Instance to Inventory
+    add_host: name=cirros-instance1 groups=testgroup1
+              ansible_ssh_host={{ nova.public_ip[0] }} 
+- hosts: testgroup1
+  remote_user: cloud-user
+  sudo: yes
+  tasks:
+    - name: Filling the content of /etc/resolv.conf
+      copy:
+        dest: /etc/resolv.conf
+        content: "nameserver 8.8.8.8\n"
