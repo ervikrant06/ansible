@@ -1,0 +1,23 @@
+- name: Deploy an OpenStack Instance
+  hosts: localhost
+  gather_facts: false
+  tasks:
+  - name: Deploy an instance
+    nova_compute:
+      state: present
+      login_username: admin
+      login_password: 2aef07b2f2bb465d
+      login_tenant_name: admin
+      auth_url: http://127.0.0.1:5000/v2.0/
+      name: cirros-instance1
+      image_name: cirros
+      key_name: keypair1
+      wait_for: 200
+      flavor_id: 1
+      #auto_floating_ip: yes
+      floating_ips: 
+        - 192.168.122.3
+      nics:
+        - net-id: 31743f8e-8204-4da3-9bc4-6b44f417eeb6
+      meta:
+        hostname: cirros-instance1.localdomain
