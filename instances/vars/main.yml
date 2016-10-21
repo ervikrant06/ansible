@@ -1,0 +1,21 @@
+---
+prefix: admin
+servers:
+  - name: lb
+    image: rhel7.2
+    flavor: cf88ca1e-3ff4-4503-a77b-ceb07e978ffb
+    key: keypair1
+    floatingip: 192.168.122.3
+    networkid: 31743f8e-8204-4da3-9bc4-6b44f417eeb6
+    hostname: lb.localhost
+    meta: 
+      group: loadbalancers
+  - name: app
+    image: rhel7.2
+    flavor: cf88ca1e-3ff4-4503-a77b-ceb07e978ffb
+    key: keypair1
+    floatingip: 192.168.122.9
+    networkid: 31743f8e-8204-4da3-9bc4-6b44f417eeb6
+    hostname: app.localhost
+    meta: 
+      group: appservers

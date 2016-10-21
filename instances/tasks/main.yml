@@ -1,0 +1,23 @@
+---
+- name: Spawning multiple instances
+  nova_compute:
+    state: present
+    name: "{{ prefix }}-{{ item.name }}"
+    image_name: "{{ item.image }}"
+    key_name: "{{ item.key }}"
+    wait_for: 200   
+    flavor_id: "{{ item.flavor }}"
+    floating_ips: 
+      - "{{ item.floatingip }}"
+    nics:
+      - net-id: "{{ item.networkid }}"
+    meta:
+      hostname: "{{ item.hostname }}"
+  with_items: "{{ servers }}"
+  register: instances
+- name: add hosts to inventory
+  add_host:
+    name: "{{ item['item']['name'] }}"
+    groups: "{{ item['item']['meta']['group'] }}"
+    ansible_host: "{{ item['public_ip'][0] }}"
+  with_items: "{{ instances.results }}"
